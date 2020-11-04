@@ -22,7 +22,7 @@ def main(argv):
         scope='https://www.googleapis.com/auth/webmasters.readonly')
 
     file_name = f'GSC_{start_date.replace("-", "")}.csv'
-    with open(Path().cwd() / 'GSC' / file_name, 'w') as csv_file:
+    with open(Path().cwd() / 'GSC' / file_name, 'w', encoding='utf-8') as csv_file:
         csv_file.write(f'{"|".join(FIELDS)}\n')
 
         row_limit = 25000
@@ -57,15 +57,19 @@ def main(argv):
             for row in rows:
                 keys = ''
                 if 'keys' in row:
-                    keys = u'|'.join(row['keys'])
-                    keys = _escape(keys)
-                csv_file.write('{keys}|{clicks}|{impressions}|{ctr}|{position}\n'.format(
-                    keys=keys,
-                    clicks=row['clicks'],
-                    impressions=row['impressions'],
-                    ctr=row['ctr'],
-                    position=row['position']
-                ))
+                        calenar_date, page, query, device = row['keys']
+                        # query = ''.join(query.strip().split('|')).replace('  ', ' ')
+                        query = query.replace('|', '').replace('  ', ' ')
+                        key_fields = calenar_date, page, query, device
+                        keys = u'|'.join(key_fields)
+                        keys = _escape(keys)
+                        csv_file.write('{keys}|{clicks}|{impressions}|{ctr}|{position}\n'.format(
+                        keys=keys,
+                        clicks=row['clicks'],
+                        impressions=row['impressions'],
+                        ctr=row['ctr'],
+                        position=row['position']
+                    ))
 
             len_rows = len(response['rows'])
             processed_rows = start_row + len_rows

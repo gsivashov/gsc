@@ -38,13 +38,16 @@ def main(argv):
         request = {
             'startDate': flags.start_date,
             'endDate': flags.end_date,
-            'dimensions': ['page'],
-            'dimensionFilterGroups': [{
-                'filters': [{
-                    'dimension': 'device',
-                    'expression': 'desktop'
-                }]
-            }],
+            'dimensions': ['date','page','query','device'],
+            # 'aggregationType': 'byPage',
+            'searchType': 'web',
+            # 'dimensionFilterGroups': [{
+            #     'filters': [{
+            #         'dimension': 'query',
+            #         'operator': 'contains',
+            #         'expression': 'prom'
+            #     }]
+            # }],
             'rowLimit': row_limit,
             'startRow': start_row
         }

@@ -53,7 +53,6 @@ def main(argv):
         }
 
         response = execute_request(service, flags.property_uri, request)
-        import pdb; pdb.set_trace()
         print_table(response, 'Top Queries')
 
         # # TODO: only for debug {

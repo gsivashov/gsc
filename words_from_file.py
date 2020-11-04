@@ -28,12 +28,12 @@ def main(argv):
         scope='https://www.googleapis.com/auth/webmasters.readonly')
 
     row_limit = 25000
-    with open('start-file.txt', 'r') as url_list:
+    with open('word-file.txt', 'r') as word_list:
         print('URL|Keys|Clicks|Impressions|CTR|Position')
 
-        for url in url_list:
-            url = url.strip()
-            if not url:
+        for word in word_list:
+            word = word.strip()
+            if not word:
                 continue
             # print(url)
 
@@ -45,11 +45,12 @@ def main(argv):
                 request = {
                     'startDate': flags.start_date,
                     'endDate': flags.end_date,
-                    'dimensions': ['page','query'],
+                    'dimensions': ['page', 'query'],
                     'dimensionFilterGroups': [{
                         'filters': [{
-                            'dimension': 'page',
-                            'expression': url
+                            'dimension': 'query',
+                            'operator': 'contains',
+                            'expression': word
                         }]
                     }],
                     'rowLimit': row_limit,
@@ -61,7 +62,7 @@ def main(argv):
 
                 len_rows = len(response.get('rows', []))
                 if len_rows:
-                    print_table(url, response, 'Top Queries')
+                    print_table(word, response, 'Top Queries')
                     processed_rows = start_row + len_rows
 
                 if len_rows != row_limit:
@@ -73,7 +74,7 @@ def execute_request(service, property_uri, request):
         siteUrl=property_uri, body=request).execute()
 
 
-def print_table(url, response, title):
+def print_table(word, response, title):
     if 'rows' not in response:
         print('No rows in response')
         print('Responce is:', response)
@@ -85,8 +86,8 @@ def print_table(url, response, title):
         keys = ''
         if 'keys' in row:
             keys = u'|'.join(row['keys'])
-        print('{url}|{keys}|{clicks}|{impressions}|{ctr}|{position}'.format(
-            url=url,
+        print('{word}|{keys}|{clicks}|{impressions}|{ctr}|{position}'.format(
+            word=word,
             keys=keys,
             clicks=row['clicks'],
             impressions=row['impressions'],

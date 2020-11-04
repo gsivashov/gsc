@@ -1,3 +1,12 @@
 .venv
 client_secrets.json
+client_secrets_prom.json
 webmasters.dat
+GSC
+.vscode
+gsc.code-workspace
+trans.js
+rozetka
+GSC_SATU
+GSC_DEAL
+*.ini
